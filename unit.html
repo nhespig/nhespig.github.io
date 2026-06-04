@@ -666,7 +666,24 @@
             const unitFullTitle = `${unitText}: ${unit.name}`;
             const subtitleText = `單元 ${currentUnit} 作業 - ${unit.attributes.join('、')}`;
             const titleText = `${unitFullTitle} - 專案詳情 | 2026 AI`;
-
+// 針對單元24的專屬 YouTube 影片處理
+            if (currentUnit === 24) {
+                const videoHTML = `
+                    <div class="container mt-5 mb-5" id="unit24-videos">
+                        <h3 class="section-title" style="font-size: 1.5rem;">單元展示影片</h3>
+                        <div class="ratio ratio-16x9 mb-4 shadow-sm rounded overflow-hidden">
+                            <iframe src="https://youtu.be/oDqsQuU00nQ" allowfullscreen></iframe>
+                        </div>
+                        <div class="ratio ratio-16x9 mb-4 shadow-sm rounded overflow-hidden">
+                            <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                `;
+                // 將影片安插到主要內容區塊內
+                setTimeout(() => {
+                    document.querySelector('.content-section').insertAdjacentHTML('afterend', videoHTML);
+                }, 100);
+            }
             // Update page title
             document.title = titleText;
 
