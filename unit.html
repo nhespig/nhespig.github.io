@@ -666,8 +666,39 @@
             const unitFullTitle = `${unitText}: ${unit.name}`;
             const subtitleText = `單元 ${currentUnit} 作業 - ${unit.attributes.join('、')}`;
             const titleText = `${unitFullTitle} - 專案詳情 | 2026 AI`;
-// 針對單元24的專屬 YouTube 影片處理 if (currentUnit === 24) { const videoHTML = <div class="container mt-5 mb-5" id="unit24-videos"> <h3 class="section-title" style="font-size: 1.5rem;">單元展示影片</h3> <div class="ratio ratio-16x9 mb-4 shadow-sm rounded overflow-hidden"> <iframe src="https://www.youtube.com/embed/oDqsQuU00nQ" allowfullscreen></iframe> </div> <div class="ratio ratio-16x9 mb-4 shadow-sm rounded overflow-hidden"> <iframe src="https://www.youtube.com/embed/8GxidkeM7uw" allowfullscreen></iframe> </div> </div> ; // 將影片安插到主要內容區塊內 setTimeout(() => { document.querySelector('.content-section').insertAdjacentHTML('afterend', videoHTML); }, 100); }
-            }
+// 針對單元24的專屬 YouTube 影片處理
+if (currentUnit === 24) {
+    const contentSection = document.querySelector('.content-section');
+
+    // 避免找不到主要內容區塊時報錯，也避免重複插入影片
+    if (contentSection && !document.querySelector('#unit24-videos')) {
+        const videoHTML = `
+            <div class="container mt-5 mb-5" id="unit24-videos">
+                <h3 class="section-title" style="font-size: 1.5rem;">單元展示影片</h3>
+
+                <div class="ratio ratio-16x9 mb-4 shadow-sm rounded overflow-hidden">
+                    <iframe 
+                        src="https://www.youtube.com/embed/oDqsQuU00nQ"
+                        title="單元24展示影片一"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <div class="ratio ratio-16x9 mb-4 shadow-sm rounded overflow-hidden">
+                    <iframe 
+                        src="https://www.youtube.com/embed/8GxidkeM7uw"
+                        title="單元24展示影片二"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        `;
+
+        contentSection.insertAdjacentHTML('afterend', videoHTML);
+    }
+}
             // Update page title
             document.title = titleText;
 
