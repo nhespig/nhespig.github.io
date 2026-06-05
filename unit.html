@@ -11,6 +11,8 @@
     <style>
         /* 清爽專業漸層背景 */
         body {
+
+            
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e8ba3 100%);
             background-attachment: fixed;
             color: #2d3748;
@@ -776,7 +778,10 @@ renderUnit24Videos();
 
                 return `
                     <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(${index})">
-                        <img src="${image.src}" alt="單元 ${currentUnit} - 圖片 ${index + 1}">
+                        <img 
+    src="${image.src}" 
+    alt="單元 ${currentUnit} - 圖片 ${index + 1}"
+    onerror="this.style.display='none'; this.closest('.gallery-item').querySelector('p').textContent='找不到圖片：${image.src}'">
                         <div class="gallery-overlay">
                             <h5>${fileName}</h5>
                             <p>${unit.name}</p>
@@ -793,7 +798,9 @@ renderUnit24Videos();
     const modalImage = document.getElementById('modalImage');
     const imageDescription = document.getElementById('imageDescription');
 
-   }
+    modalImage.src = image.src;
+    imageDescription.textContent = image.description;
+}
 
 // 單元24影片：縮圖並排，點擊後放大播放
 function renderUnit24Videos() {
