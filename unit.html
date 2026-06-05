@@ -406,6 +406,68 @@
                 gap: 1.5rem;
             }
         }
+
+/* Unit 24 Video Cards */
+#unit24-videos {
+    margin-bottom: 3rem;
+}
+
+.unit24-video-card {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(139, 233, 253, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.unit24-video-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(139, 233, 253, 0.3);
+    border-color: #8be9fd;
+}
+
+.unit24-video-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+}
+
+.unit24-video-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.unit24-play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 62px;
+    height: 62px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: rgba(30, 60, 114, 0.85);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.unit24-video-title {
+    padding: 1rem 1.2rem;
+    color: #1e3c72;
+    font-weight: 700;
+    background: white;
+}
+
+        
     </style>
 </head>
 <body>
@@ -547,6 +609,9 @@
             // Render gallery
             renderGallery();
 
+// Render unit 24 videos
+renderUnit24Videos();
+
             // Update navigation
             updateNavigation();
 
@@ -666,38 +731,7 @@
             const unitFullTitle = `${unitText}: ${unit.name}`;
             const subtitleText = `單元 ${currentUnit} 作業 - ${unit.attributes.join('、')}`;
             const titleText = `${unitFullTitle} - 專案詳情 | 2026 AI`;
-// 針對單元24的專屬 YouTube 影片處理
-if (currentUnit === 24) {
-    const contentSection = document.querySelector('.content-section');
 
-    // 避免找不到主要內容區塊時報錯，也避免重複插入影片
-    if (contentSection && !document.querySelector('#unit24-videos')) {
-        const videoHTML = `
-            <div class="container mt-5 mb-5" id="unit24-videos">
-                <h3 class="section-title" style="font-size: 1.5rem;">單元展示影片</h3>
-
-                <div class="ratio ratio-16x9 mb-4 shadow-sm rounded overflow-hidden">
-                    <iframe 
-                        src="https://www.youtube.com/embed/oDqsQuU00nQ"
-                        title="單元24展示影片一"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-
-                <div class="ratio ratio-16x9 mb-4 shadow-sm rounded overflow-hidden">
-                    <iframe 
-                        src="https://www.youtube.com/embed/8GxidkeM7uw"
-                        title="單元24展示影片二"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            </div>
-        `;
-
-        contentSection.insertAdjacentHTML('afterend', videoHTML);
-    }
 }
             // Update page title
             document.title = titleText;
@@ -760,6 +794,111 @@ if (currentUnit === 24) {
             const modalImage = document.getElementById('modalImage');
             const imageDescription = document.getElementById('imageDescription');
 
+// 單元24影片：縮圖並排，點擊後放大播放
+function renderUnit24Videos() {
+    // 不是單元24就不顯示影片
+    if (currentUnit !== 24) {
+        const oldVideoSection = document.getElementById('unit24-videos');
+        if (oldVideoSection) oldVideoSection.remove();
+
+        const oldVideoModal = document.getElementById('unit24VideoModal');
+        if (oldVideoModal) oldVideoModal.remove();
+
+        return;
+    }
+
+    // 避免重複插入
+    if (document.getElementById('unit24-videos')) {
+        return;
+    }
+
+    const gallerySection = document.querySelector('.content-section');
+
+    if (!gallerySection) {
+        return;
+    }
+
+    const videoHTML = `
+        <section class="content-section fade-in" id="unit24-videos">
+            <h2 class="section-title">單元展示影片</h2>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6">
+                    <div class="unit24-video-card"
+                         onclick="openUnit24Video('oDqsQuU00nQ', '單元24展示影片一')">
+                        <div class="unit24-video-thumb">
+                            <img src="https://img.youtube.com/vi/oDqsQuU00nQ/hqdefault.jpg"
+                                 alt="單元24展示影片一">
+                            <div class="unit24-play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="unit24-video-title">單元24展示影片一</div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="unit24-video-card"
+                         onclick="openUnit24Video('8GxidkeM7uw', '單元24展示影片二')">
+                        <div class="unit24-video-thumb">
+                            <img src="https://img.youtube.com/vi/8GxidkeM7uw/hqdefault.jpg"
+                                 alt="單元24展示影片二">
+                            <div class="unit24-play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="unit24-video-title">單元24展示影片二</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="modal fade" id="unit24VideoModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="unit24VideoModalTitle">單元展示影片</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="ratio ratio-16x9">
+                            <iframe id="unit24VideoFrame"
+                                    src=""
+                                    title="單元24影片"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // 插在作業相簿後面，但不改動相簿內容
+    gallerySection.insertAdjacentHTML('afterend', videoHTML);
+
+    const videoModalElement = document.getElementById('unit24VideoModal');
+
+    videoModalElement.addEventListener('hidden.bs.modal', function () {
+        document.getElementById('unit24VideoFrame').src = '';
+    });
+}
+
+// 開啟單元24影片 Modal
+function openUnit24Video(videoId, videoTitle) {
+    const videoFrame = document.getElementById('unit24VideoFrame');
+    const videoModalTitle = document.getElementById('unit24VideoModalTitle');
+    const videoModalElement = document.getElementById('unit24VideoModal');
+
+    videoModalTitle.textContent = videoTitle;
+    videoFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+    const videoModal = new bootstrap.Modal(videoModalElement);
+    videoModal.show();
+}
+
+            
             modalImage.src = image.src;
             imageDescription.textContent = image.description;
         }
