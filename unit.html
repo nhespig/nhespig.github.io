@@ -725,27 +725,26 @@ renderUnit24Videos();
         }
 
         // Update page content based on unit number
-        function updatePageContent() {
-            const unit = unitInfo[currentUnit];
-            const unitText = `單元 #${currentUnit}`;
-            const unitFullTitle = `${unitText}: ${unit.name}`;
-            const subtitleText = `單元 ${currentUnit} 作業 - ${unit.attributes.join('、')}`;
-            const titleText = `${unitFullTitle} - 專案詳情 | 2026 AI`;
+     function updatePageContent() 
+     {
+    const unit = unitInfo[currentUnit];
+    const unitText = `單元 #${currentUnit}`;
+    const unitFullTitle = `${unitText}: ${unit.name}`;
+    const subtitleText = `單元 ${currentUnit} 作業 - ${unit.attributes.join('、')}`;
+    const titleText = `${unitFullTitle} - 專案詳情 | 2026 AI`;
 
+    // Update page title
+    document.title = titleText;
+
+    // Update breadcrumb
+    document.getElementById('breadcrumb-unit').textContent = unitFullTitle;
+
+    // Update project title
+    document.getElementById('project-title').textContent = unitFullTitle;
+
+    // Update project subtitle
+    document.getElementById('project-subtitle').textContent = subtitleText;
 }
-            // Update page title
-            document.title = titleText;
-
-            // Update breadcrumb
-            document.getElementById('breadcrumb-unit').textContent = unitFullTitle;
-
-            // Update project title
-            document.getElementById('project-title').textContent = unitFullTitle;
-
-            // Update project subtitle
-            document.getElementById('project-subtitle').textContent = subtitleText;
-        }
-
         // Generate images array for current unit
         function generateImages() {
             const unit = unitInfo[currentUnit];
@@ -789,10 +788,14 @@ renderUnit24Videos();
         }
 
         // Show image in modal
-        function showImage(index) {
-            const image = images[index];
-            const modalImage = document.getElementById('modalImage');
-            const imageDescription = document.getElementById('imageDescription');
+       function showImage(index) {
+    const image = images[index];
+    const modalImage = document.getElementById('modalImage');
+    const imageDescription = document.getElementById('imageDescription');
+
+    modalImage.src = image.src;
+    imageDescription.textContent = image.description;
+}
 
 // 單元24影片：縮圖並排，點擊後放大播放
 function renderUnit24Videos() {
@@ -952,34 +955,6 @@ function openUnit24Video(videoId, videoTitle) {
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch(`YoutubeLink/unit${currentUnit}.txt`)
-                .then(response => {
-                    if (!response.ok) throw new Error("No YouTube link found.");
-                    return response.text();
-                })
-                .then(text => {
-                    const firstLine = text.trim().split('\n')[0];
-                    if (firstLine.includes("youtube") || firstLine.includes("youtu.be")) {
-                        const videoId = firstLine.includes("youtu.be")
-                            ? firstLine.split("youtu.be/")[1]
-                            : firstLine.split("v=")[1].split("&")[0];
-                        const iframeHTML = `
-                            <div class="container mt-5 mb-5">
-                                <div class="ratio ratio-16x9">
-                                    <iframe src="https://www.youtube.com/embed/${videoId}" 
-                                            title="YouTube video" allowfullscreen></iframe>
-                                </div>
-                            </div>`;
-                        document.body.insertAdjacentHTML("beforeend", iframeHTML);
-                    }
-                })
-                .catch(err => {
-                    console.log("No YouTube video for this unit.");
-                });
-        });
-    </script>
-
+  
 </body>
 </html>
